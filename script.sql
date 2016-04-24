@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.47, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.46, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: MainDB
 -- ------------------------------------------------------
--- Server version	5.5.47-0ubuntu0.14.04.1
+-- Server version	5.5.46-0ubuntu0.14.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,6 +16,39 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `Client_Company`
+--
+
+DROP TABLE IF EXISTS `Client_Company`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Client_Company` (
+  `idClientCompany` int(10) NOT NULL AUTO_INCREMENT,
+  `CC_Name` varchar(255) NOT NULL,
+  `CC_Address` varchar(255) NOT NULL,
+  `CC_Phone` int(15) NOT NULL,
+  `CC_Skype` varchar(255) NOT NULL,
+  `CC_Email` varchar(255) NOT NULL,
+  `CC_Description` varchar(255) NOT NULL,
+  `idAccount` int(10) NOT NULL,
+  `CC_Logo` varchar(255) NOT NULL,
+  PRIMARY KEY (`idClientCompany`),
+  KEY `lnk_Client_Company_users` (`idAccount`),
+  CONSTRAINT `lnk_Client_Company_users` FOREIGN KEY (`idAccount`) REFERENCES `users` (`idAccount`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Client_Company`
+--
+
+LOCK TABLES `Client_Company` WRITE;
+/*!40000 ALTER TABLE `Client_Company` DISABLE KEYS */;
+INSERT INTO `Client_Company` VALUES (2,'Company1','Address of Company 1',123456789,'skypecompany','company1@enclave.vn','This is about a company of producing software for whole system of universites',56,''),(5,'Company2','Address of Company',985513217,'skypecompany2','company2@enclave.vn','This is about a company of producing product for software engineering department of Enclave',57,'');
+/*!40000 ALTER TABLE `Client_Company` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `Clients`
 --
 
@@ -27,15 +60,19 @@ CREATE TABLE `Clients` (
   `ClientName` varchar(50) DEFAULT NULL,
   `C_Phone` int(15) DEFAULT NULL,
   `C_Address` varchar(100) DEFAULT NULL,
-  `C_Company` varchar(100) DEFAULT NULL,
   `C_Skype` varchar(25) DEFAULT NULL,
   `idAccount` int(10) DEFAULT NULL,
   `idNote` int(10) DEFAULT NULL,
+  `idClientCompany` int(10) DEFAULT NULL,
+  `C_Email` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `C_Avatar` varchar(255) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`idClient`),
   KEY `idNote` (`idNote`),
   KEY `fk_Clients_1_idx` (`idAccount`),
+  KEY `lnk_Clients_Client_Company` (`idClientCompany`),
   CONSTRAINT `Clients_ibfk_2` FOREIGN KEY (`idNote`) REFERENCES `Note` (`idNote`),
-  CONSTRAINT `fk_Clients_1` FOREIGN KEY (`idAccount`) REFERENCES `users` (`idAccount`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_Clients_1` FOREIGN KEY (`idAccount`) REFERENCES `users` (`idAccount`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `lnk_Clients_Client_Company` FOREIGN KEY (`idClientCompany`) REFERENCES `Client_Company` (`idClientCompany`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -45,7 +82,7 @@ CREATE TABLE `Clients` (
 
 LOCK TABLES `Clients` WRITE;
 /*!40000 ALTER TABLE `Clients` DISABLE KEYS */;
-INSERT INTO `Clients` VALUES (1,'Client1',1200000001,'Address1','Company1','Skype1',41,NULL),(2,'Client2',1200000002,'Address2','Company2','Skype2',42,NULL),(3,'Client3',1200000003,'Address3','Company3','Skype3',43,NULL),(4,'Client4',1200000004,'Address4','Company4','Skype4',44,NULL),(5,'Client5',1200000005,'Address5','Company5','Skype5',45,NULL);
+INSERT INTO `Clients` VALUES (1,'Client1',1200000001,'Address1','Skype1',41,NULL,2,'client1@company1.us','client1.png'),(2,'Client2',1200000002,'Address2','Skype2',42,NULL,2,'client2@company1.us','client2.png'),(3,'Client3',1200000003,'Address3','Skype3',43,NULL,5,'client3@company1.us','client3.png'),(4,'Client4',1200000004,'Address4','Skype4',44,NULL,5,'client4@company1.us','client4.png'),(5,'Client5',1200000005,'Address5','Skype5',45,NULL,5,'client5@company1.us','client5.png');
 /*!40000 ALTER TABLE `Clients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -370,7 +407,7 @@ CREATE TABLE `Project` (
 
 LOCK TABLES `Project` WRITE;
 /*!40000 ALTER TABLE `Project` DISABLE KEYS */;
-INSERT INTO `Project` VALUES (46,'Test1',1000000001,1100000004,1,'2016-04-22 08:48:55','2016-04-22','2016-05-21',NULL,2),(47,'Test2',1000000001,1100000002,2,'2016-04-22 08:53:38','2016-04-22','2016-05-20',NULL,2),(48,'Test',1000000001,1100000002,4,'2016-04-22 09:45:40','2016-04-22','2016-05-19',NULL,1);
+INSERT INTO `Project` VALUES (46,'Test1',1000000001,1100000004,4,'2016-04-22 08:48:55','2016-04-22','2016-05-21',NULL,2),(47,'Test2',1000000001,1100000002,5,'2016-04-22 08:53:38','2016-04-22','2016-05-20',NULL,1),(48,'Test',1000000001,1100000002,4,'2016-04-22 09:45:40','2016-04-22','2016-05-19',NULL,1);
 /*!40000 ALTER TABLE `Project` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -519,7 +556,7 @@ CREATE TABLE `Role` (
 
 LOCK TABLES `Role` WRITE;
 /*!40000 ALTER TABLE `Role` DISABLE KEYS */;
-INSERT INTO `Role` VALUES (1,'Administrator','This is Administrator'),(2,'Manager','This is Manager'),(3,'Leader','This is Leader'),(4,'Client','This is Client'),(5,'Member','This is Member');
+INSERT INTO `Role` VALUES (1,'Administrator','This is Administrator'),(2,'Manager','This is Manager'),(3,'Leader','This is Leader'),(4,'Client','This is Client'),(5,'Member','This is Member'),(6,'Client Company','This is Company of Representative');
 /*!40000 ALTER TABLE `Role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -696,7 +733,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_email_unique` (`email`),
   KEY `fk_users_1_idx` (`idRole`),
   CONSTRAINT `fk_users_1` FOREIGN KEY (`idRole`) REFERENCES `Role` (`idRole`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -705,7 +742,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin@enclave.vn','$2y$10$glV9.12rSlJhg6SRn2QFieI77bv8sxcDQY93sDmRt2lEyE0tUs2XS',1,'W3QBbpacKezRzMkEQSPyx6ayslX91EK8tBeBas7hOmt27sG0b1tePMl0RAas',NULL,NULL),(2,'projectmanager1@enclave.vn','$2y$10$rWly/v51PLv3sifFVqOnr.IDa2a2t2a5KKakUOy6sLLGYSb5JHXjO',2,'0KAW1GU4Z9syak9rXahVMreXmdhIKy4V3kLgooFGPEKXO7MRqMCN2qthL6Yk',NULL,NULL),(3,'projectmanager2@enclave.vn','$2y$10$UyNfOn/4DGNvNClnJkJyFeYR.D7727lo3qUgPW3bqA0geK.wFsNF6',2,'UAOLeYb1PuvGGpyPqymNiVVL3AlksnM3lLwYCR84i9RoEhW6fgFheAqsWmWI',NULL,NULL),(4,'projectmanager3@enclave.vn','$2y$10$0T17tiD6yhzU2QAvs5XQAOStrPJ8J/8broe7E6cwJFlSbnWCr4liq',2,'DWmxBDZtnSCmQaXptvNdZ7cDlrhPmmIPbeF0AM6tRJfRQ1OaRW1jhasC35Ki',NULL,NULL),(5,'projectmanager4@enclave.vn','$2y$10$XNL6m1MJtjEUDO7vPCSHBusIZ3untW/3/cwawc.dt6GytaVlJW.H6',2,'pWmrlUCA6psscIGz5CRmqhfnqRx8ZdwbpIvZ5ermY2OKd9fJP1gelp0T1oMQ',NULL,NULL),(6,'projectmanager5@enclave.vn','$2y$10$41W5CjRecVavkGLagF7VPuwJy91DK/FMZ6pYOAC4mGRLg9GVz.yha',2,'yQlzje4GAyjv54s8AjC2OVVdblo3iktFIIlQvUjUTayQWWa4PFvGiYUxxTZo',NULL,NULL),(7,'membem1@enclave.vn','$2y$10$0wuqptODjklbP7.8.GIhweigJOxwMaDtj2dvuRiPGShGXG0AgnNcW',5,'6aYamLmx3f0rfvkTi7aUD5R8L6bTECyEDy4vHM9soaGPZgS94KkDQKDAebCb',NULL,NULL),(8,'membem2@enclave.vn','$2y$10$qNm3aX.JYGwFUs/jRJxljuxn9Xp6EkO/TfV6PZxVmFTHyF8SkOi0i',3,NULL,NULL,NULL),(9,'membem3@enclave.vn','$2y$10$R33q.lfDIURMMbshMWy.T.CrnKethzTnoQNKF.XqU7NiGeRnj0Hyu',5,NULL,NULL,NULL),(10,'membem4@enclave.vn','$2y$10$Bkh8uelH/xrxBSxFz4ySl.sTKZ9loluEQIJAhtBU0aoKoUw2wkmB2',5,NULL,NULL,NULL),(11,'membem5@enclave.vn','$2y$10$WnjSfgIoKyxD/1D4XQLQK.tRGwEd3cWu8KwpFSVpBKv5pz/fOYnqC',5,NULL,NULL,NULL),(12,'membem6@enclave.vn','$2y$10$WpDau/K3Pjj0wyQdSAJ/7OjzyZGNozJXAb/Js1ocVMbu.urzLZruW',5,NULL,NULL,NULL),(13,'membem7@enclave.vn','$2y$10$00s6KhedvdHj.95dBDE5vuE2YUQez207Amhd2WaGRyGOIwhoWTu4S',5,NULL,NULL,NULL),(14,'membem8@enclave.vn','$2y$10$yJHJQgy/GJAQB9Mmn5e1Ne94A0WAwcItm3XQLWUzieGiI2f8CbT3C',5,NULL,NULL,NULL),(15,'membem9@enclave.vn','$2y$10$doB87NckrF27XjBeKfO1jeBlBg7dSlHm3YDUGROePCUc7iqpo4LWO',5,NULL,NULL,NULL),(16,'member10@enclave.vn','$2y$10$FMDObqy2CKw3R42bX.1NaOYpiLmT4OUDuPEIYdRpsSntkDhH0ER7m',5,NULL,NULL,NULL),(17,'member11@enclave.vn','$2y$10$WDT2Xe2BeavDwWej0eNMLOueZ6UR8cF8UPAzMuL8U9j9/aUFqQ3h6',5,NULL,NULL,NULL),(18,'member12@enclave.vn','$2y$10$Tahl1TKxfIG2JD0DrGW1Y.f0A3qMTTtwKrbgWvERDW9yTuaZicVHq',5,NULL,NULL,NULL),(19,'member13@enclave.vn','$2y$10$fAkQ2vBBf9oDeTZ.kRhm3OQgvcU65mnOAucTmT9xyg3JI7lc4XjYO',5,NULL,NULL,NULL),(20,'member14@enclave.vn','$2y$10$velsujLOg.S2mfI4KpLERux68wS.T9JygfIqVPvetjeEHPOTXzXaa',5,NULL,NULL,NULL),(21,'member15@enclave.vn','$2y$10$WpP8sEjaJq26KHm1Tn3vd.660iSffp5V6Kt9B3YTPyBsweKUjZ4ZK',5,NULL,NULL,NULL),(22,'member16@enclave.vn','$2y$10$NhJeCdy3/utOmt6ExlKYgOAsMUTJm2fty.1IrXN9quwoTvSb0tNU6',5,NULL,NULL,NULL),(23,'member17@enclave.vn','$2y$10$YJnlwzjfRXhPJ7a5kQbuBOTsFuJgaOMYkFKy30U9it/JZRia8zWym',5,NULL,NULL,NULL),(24,'member18@enclave.vn','$2y$10$7QbzPparQyg95MVmyKPG..T972ULeN9qe20BXOpCEl98i3q7hCnNy',5,NULL,NULL,NULL),(25,'member19@enclave.vn','$2y$10$me5P.8uzbrOidEKfZ2tMFeyh6D0aBrNWEQhKTSafAXd/Yn0YgxDuG',5,NULL,NULL,NULL),(26,'member20@enclave.vn','$2y$10$056gqNm5.5gxxQYTyE6uxuQddSEgJE5zuTbI3E04uzEHSdlfW/x8i',5,NULL,NULL,NULL),(27,'member21@enclave.vn','$2y$10$b0EDbaaa2IkhStAFtvchi.gmy9BcoKOQwoyE1A/bi9ChvkBYzAVdu',5,NULL,NULL,NULL),(28,'member22@enclave.vn','$2y$10$.SAl6FBRrWp4lhwpwR3o2uR4xWzeip7BUXJcMQLqB2hO6GLbp2/LK',5,NULL,NULL,NULL),(29,'member23@enclave.vn','$2y$10$avrbgayT91C51dwLLwFHsutFT/aI0AjbzW7SNuqcHmmM6DNkqCMeC',5,NULL,NULL,NULL),(30,'member24@enclave.vn','$2y$10$CeuWFVvclddDL.uwfLijiOsO69opniGjTE0P8Dy96oWI6tEu6RTpC',5,NULL,NULL,NULL),(31,'member25@enclave.vn','$2y$10$vuvnaOAdx0lHoJ.1hV.Bbu/QqxXSVf1xovul9olQ0UalVhHbVaKFK',5,NULL,NULL,NULL),(32,'member26@enclave.vn','$2y$10$B5cIXiNtlb2F5W.Fmm3qxeK7W13O8KNRqPPWnZs8Mv3.EgJhoKxvy',5,NULL,NULL,NULL),(33,'member27@enclave.vn','$2y$10$WYlLKcAleUfYKY70T3dUQ.0E9xonJpg4D2k5NLHh6BGwjDGhH7wW.',5,NULL,NULL,NULL),(34,'member28@enclave.vn','$2y$10$NwkR.J0z1ryBpBmksrmT.ehYl8wFXZeKthybgfUxKSq6qpN7G3WsC',5,NULL,NULL,NULL),(35,'member29@enclave.vn','$2y$10$ykyn3k2.IvQXg4JHRj7i3uVjssdPIGslYMNjDzppXOy5Ts6gq0vIW',5,NULL,NULL,NULL),(36,'member30@enclave.vn','$2y$10$VhWOFlLDXQL7oMOx0zrJ2OXzKOJwo47nuZvsef6POrJiIVbfw.u7i',5,NULL,NULL,NULL),(37,'member31@enclave.vn','$2y$10$GPRO0JSxEVWMfwf/NjgyTuBL4LIGt.etA9BJRNm8tqHQvFe5Gzm4G',5,NULL,NULL,NULL),(38,'member32@enclave.vn','$2y$10$GjkgJvR1L4LiDGk5jtZEN.LJ67q.hENM.eELMx7IQEjBcny3o3fui',5,NULL,NULL,NULL),(39,'member33@enclave.vn','$2y$10$dOMOJAWoVlLEPnyMr7gP9Oki7dJGCSpq5tpb63VbC5kEDX81gYnke',5,NULL,NULL,NULL),(40,'member34@enclave.vn','$2y$10$ch3dSQLLp2czrl59lvQrouHRbUwve8ogiZpC.wjlw2mrb8aPyURPG',5,NULL,NULL,NULL),(41,'client1@enclave.vn','$2y$10$TiOSwmCt6QHyidtQQbAQ0.pcrsZBbSUPH/BPov8CcvayaNv5qt4Y6',4,'yh9MESohf3zcwCAgMLk4CtX2TOzR6tR72L8VQFr64BLMv74Z9oOrf6Ec88H0',NULL,NULL),(42,'client2@enclave.vn','$2y$10$0GB9maO9hWfFPLfczNEwiumfhsyIUgSnqx4h1Yri3akjlenVU8yCa',4,NULL,NULL,NULL),(43,'client3@enclave.vn','$2y$10$pknsTIQhHn/bHW.HL1HMOuoOotLQX9FqkhECj.MWoCPGnW8h.K3dq',4,NULL,NULL,NULL),(44,'client4@enclave.vn','$2y$10$lQuDGPu6u5DtbvIl68IH6u2Vvvy/dxq7/TZ3zxgiSAvACldITkQvW',4,NULL,NULL,NULL),(45,'client5@enclave.vn','$2y$10$oRvZhFuXNmorQWupnX.dlO0ynUsOkscqLd2Mjxre/wjXsW.UD8QhG',4,NULL,NULL,NULL),(46,'member35@enclave.vn','$2y$10$9ns1USWkf/F1eosxOpEs3Omp9xSqmeK6BZBScWxrwgW/BtV4Q3gdO',5,'VgviYGYYqm7AKdToJOztlTc1OPLKkboA9Q1lOw7nm7j3ebYkTpUgz1VwrkMo',NULL,NULL),(47,'member36@enclave.vn','$2y$10$.olXRw2j6m0.iA9jpeepjOG0ffK1aN/ssSSMFLxcIudDeeh/.zMB2',5,NULL,NULL,NULL),(48,'member37@enclave.vn','$2y$10$p//W7OyskasWPswpZ7chx.qEkvTVllgcHuHMaC4jZKFrBC.aiV.hG',5,NULL,NULL,NULL),(49,'member38@enclave.vn','$2y$10$ciZdntFuxJzJ64QoJMQw4.HEGM8R.Uo06.2xEPFGKCl49AUuQpW4K',5,NULL,NULL,NULL),(50,'member39@enclave.vn','$2y$10$WwjIvYmOvrKtM5yMdeRBeOeNbxkJPkvC0p8bYIUj9Q0sMoaEW7b/i',5,'gbLnwcRJf09Bv4y7ihuTCWL2T7tniF23zwjl2GNuRnjetts8OpFJbAlmBxZm',NULL,NULL),(51,'member40@enclave.vn','$2y$10$8VTjKoBShySU3m/upC1lBebCYMGu/sJJcuaNLK0hcs3CYX9IvxirK',5,NULL,NULL,NULL),(52,'member41@enclave.vn','$2y$10$Ee8LgNAIJewJe6QRIDlRBu..1GtRt6Hlt15ynLGJTG7OhkpQb99YC',5,NULL,NULL,NULL),(53,'member42@enclave.vn','$2y$10$0S7O.37oBqg/Nzj/H5jjQujR9mAhmg2eAf7d1Cb5o15jgSADtVq9e',5,NULL,NULL,NULL),(54,'member43@enclave.vn','$2y$10$XNwTq8j2VVDBRfc0c562xu53vnvl7avA2b5jAptA.Qw/49R8g6Dya',5,NULL,NULL,NULL),(55,'member44@enclave.vn','$2y$10$/uy0v/4YgOu2xIIz0UqoJex39LehF0rBy9Izcan2Yxt.vNc/qZAHy',5,NULL,NULL,NULL);
+INSERT INTO `users` VALUES (1,'admin@enclave.vn','$2y$10$glV9.12rSlJhg6SRn2QFieI77bv8sxcDQY93sDmRt2lEyE0tUs2XS',1,'0GjZKPe3LprhEFprxMhIM6JDKYGE1enbMhvtkTiaeeZVQEl4SVa2RWjxSVLQ',NULL,NULL),(2,'projectmanager1@enclave.vn','$2y$10$rWly/v51PLv3sifFVqOnr.IDa2a2t2a5KKakUOy6sLLGYSb5JHXjO',2,'fqQhDHU3xbdWpdseBGFwDlYJPNTlTtf8r7r10JAKVxNeLhz343CE1weiNdIu',NULL,NULL),(3,'projectmanager2@enclave.vn','$2y$10$UyNfOn/4DGNvNClnJkJyFeYR.D7727lo3qUgPW3bqA0geK.wFsNF6',2,'UAOLeYb1PuvGGpyPqymNiVVL3AlksnM3lLwYCR84i9RoEhW6fgFheAqsWmWI',NULL,NULL),(4,'projectmanager3@enclave.vn','$2y$10$0T17tiD6yhzU2QAvs5XQAOStrPJ8J/8broe7E6cwJFlSbnWCr4liq',2,'DWmxBDZtnSCmQaXptvNdZ7cDlrhPmmIPbeF0AM6tRJfRQ1OaRW1jhasC35Ki',NULL,NULL),(5,'projectmanager4@enclave.vn','$2y$10$XNL6m1MJtjEUDO7vPCSHBusIZ3untW/3/cwawc.dt6GytaVlJW.H6',2,'pWmrlUCA6psscIGz5CRmqhfnqRx8ZdwbpIvZ5ermY2OKd9fJP1gelp0T1oMQ',NULL,NULL),(6,'projectmanager5@enclave.vn','$2y$10$41W5CjRecVavkGLagF7VPuwJy91DK/FMZ6pYOAC4mGRLg9GVz.yha',2,'yQlzje4GAyjv54s8AjC2OVVdblo3iktFIIlQvUjUTayQWWa4PFvGiYUxxTZo',NULL,NULL),(7,'membem1@enclave.vn','$2y$10$0wuqptODjklbP7.8.GIhweigJOxwMaDtj2dvuRiPGShGXG0AgnNcW',5,'6aYamLmx3f0rfvkTi7aUD5R8L6bTECyEDy4vHM9soaGPZgS94KkDQKDAebCb',NULL,NULL),(8,'membem2@enclave.vn','$2y$10$qNm3aX.JYGwFUs/jRJxljuxn9Xp6EkO/TfV6PZxVmFTHyF8SkOi0i',3,NULL,NULL,NULL),(9,'membem3@enclave.vn','$2y$10$R33q.lfDIURMMbshMWy.T.CrnKethzTnoQNKF.XqU7NiGeRnj0Hyu',5,NULL,NULL,NULL),(10,'membem4@enclave.vn','$2y$10$Bkh8uelH/xrxBSxFz4ySl.sTKZ9loluEQIJAhtBU0aoKoUw2wkmB2',5,NULL,NULL,NULL),(11,'membem5@enclave.vn','$2y$10$WnjSfgIoKyxD/1D4XQLQK.tRGwEd3cWu8KwpFSVpBKv5pz/fOYnqC',5,NULL,NULL,NULL),(12,'membem6@enclave.vn','$2y$10$WpDau/K3Pjj0wyQdSAJ/7OjzyZGNozJXAb/Js1ocVMbu.urzLZruW',5,NULL,NULL,NULL),(13,'membem7@enclave.vn','$2y$10$00s6KhedvdHj.95dBDE5vuE2YUQez207Amhd2WaGRyGOIwhoWTu4S',5,NULL,NULL,NULL),(14,'membem8@enclave.vn','$2y$10$yJHJQgy/GJAQB9Mmn5e1Ne94A0WAwcItm3XQLWUzieGiI2f8CbT3C',5,NULL,NULL,NULL),(15,'membem9@enclave.vn','$2y$10$doB87NckrF27XjBeKfO1jeBlBg7dSlHm3YDUGROePCUc7iqpo4LWO',5,NULL,NULL,NULL),(16,'member10@enclave.vn','$2y$10$FMDObqy2CKw3R42bX.1NaOYpiLmT4OUDuPEIYdRpsSntkDhH0ER7m',5,NULL,NULL,NULL),(17,'member11@enclave.vn','$2y$10$WDT2Xe2BeavDwWej0eNMLOueZ6UR8cF8UPAzMuL8U9j9/aUFqQ3h6',5,NULL,NULL,NULL),(18,'member12@enclave.vn','$2y$10$Tahl1TKxfIG2JD0DrGW1Y.f0A3qMTTtwKrbgWvERDW9yTuaZicVHq',5,NULL,NULL,NULL),(19,'member13@enclave.vn','$2y$10$fAkQ2vBBf9oDeTZ.kRhm3OQgvcU65mnOAucTmT9xyg3JI7lc4XjYO',5,NULL,NULL,NULL),(20,'member14@enclave.vn','$2y$10$velsujLOg.S2mfI4KpLERux68wS.T9JygfIqVPvetjeEHPOTXzXaa',5,NULL,NULL,NULL),(21,'member15@enclave.vn','$2y$10$WpP8sEjaJq26KHm1Tn3vd.660iSffp5V6Kt9B3YTPyBsweKUjZ4ZK',5,NULL,NULL,NULL),(22,'member16@enclave.vn','$2y$10$NhJeCdy3/utOmt6ExlKYgOAsMUTJm2fty.1IrXN9quwoTvSb0tNU6',5,NULL,NULL,NULL),(23,'member17@enclave.vn','$2y$10$YJnlwzjfRXhPJ7a5kQbuBOTsFuJgaOMYkFKy30U9it/JZRia8zWym',5,NULL,NULL,NULL),(24,'member18@enclave.vn','$2y$10$7QbzPparQyg95MVmyKPG..T972ULeN9qe20BXOpCEl98i3q7hCnNy',5,NULL,NULL,NULL),(25,'member19@enclave.vn','$2y$10$me5P.8uzbrOidEKfZ2tMFeyh6D0aBrNWEQhKTSafAXd/Yn0YgxDuG',5,NULL,NULL,NULL),(26,'member20@enclave.vn','$2y$10$056gqNm5.5gxxQYTyE6uxuQddSEgJE5zuTbI3E04uzEHSdlfW/x8i',5,NULL,NULL,NULL),(27,'member21@enclave.vn','$2y$10$b0EDbaaa2IkhStAFtvchi.gmy9BcoKOQwoyE1A/bi9ChvkBYzAVdu',5,NULL,NULL,NULL),(28,'member22@enclave.vn','$2y$10$.SAl6FBRrWp4lhwpwR3o2uR4xWzeip7BUXJcMQLqB2hO6GLbp2/LK',5,NULL,NULL,NULL),(29,'member23@enclave.vn','$2y$10$avrbgayT91C51dwLLwFHsutFT/aI0AjbzW7SNuqcHmmM6DNkqCMeC',5,NULL,NULL,NULL),(30,'member24@enclave.vn','$2y$10$CeuWFVvclddDL.uwfLijiOsO69opniGjTE0P8Dy96oWI6tEu6RTpC',5,NULL,NULL,NULL),(31,'member25@enclave.vn','$2y$10$vuvnaOAdx0lHoJ.1hV.Bbu/QqxXSVf1xovul9olQ0UalVhHbVaKFK',5,NULL,NULL,NULL),(32,'member26@enclave.vn','$2y$10$B5cIXiNtlb2F5W.Fmm3qxeK7W13O8KNRqPPWnZs8Mv3.EgJhoKxvy',5,NULL,NULL,NULL),(33,'member27@enclave.vn','$2y$10$WYlLKcAleUfYKY70T3dUQ.0E9xonJpg4D2k5NLHh6BGwjDGhH7wW.',5,NULL,NULL,NULL),(34,'member28@enclave.vn','$2y$10$NwkR.J0z1ryBpBmksrmT.ehYl8wFXZeKthybgfUxKSq6qpN7G3WsC',5,NULL,NULL,NULL),(35,'member29@enclave.vn','$2y$10$ykyn3k2.IvQXg4JHRj7i3uVjssdPIGslYMNjDzppXOy5Ts6gq0vIW',5,NULL,NULL,NULL),(36,'member30@enclave.vn','$2y$10$VhWOFlLDXQL7oMOx0zrJ2OXzKOJwo47nuZvsef6POrJiIVbfw.u7i',5,NULL,NULL,NULL),(37,'member31@enclave.vn','$2y$10$GPRO0JSxEVWMfwf/NjgyTuBL4LIGt.etA9BJRNm8tqHQvFe5Gzm4G',5,NULL,NULL,NULL),(38,'member32@enclave.vn','$2y$10$GjkgJvR1L4LiDGk5jtZEN.LJ67q.hENM.eELMx7IQEjBcny3o3fui',5,NULL,NULL,NULL),(39,'member33@enclave.vn','$2y$10$dOMOJAWoVlLEPnyMr7gP9Oki7dJGCSpq5tpb63VbC5kEDX81gYnke',5,NULL,NULL,NULL),(40,'member34@enclave.vn','$2y$10$ch3dSQLLp2czrl59lvQrouHRbUwve8ogiZpC.wjlw2mrb8aPyURPG',5,NULL,NULL,NULL),(41,'client1@enclave.vn','$2y$10$TiOSwmCt6QHyidtQQbAQ0.pcrsZBbSUPH/BPov8CcvayaNv5qt4Y6',4,'dbyl5MsuGxDcIJzjQi30cveYH1edmIlzCVmzMEYMuqn5gCxRJLJNWrpPr0Jc',NULL,NULL),(42,'client2@enclave.vn','$2y$10$0GB9maO9hWfFPLfczNEwiumfhsyIUgSnqx4h1Yri3akjlenVU8yCa',4,NULL,NULL,NULL),(43,'client3@enclave.vn','$2y$10$pknsTIQhHn/bHW.HL1HMOuoOotLQX9FqkhECj.MWoCPGnW8h.K3dq',4,NULL,NULL,NULL),(44,'client4@enclave.vn','$2y$10$lQuDGPu6u5DtbvIl68IH6u2Vvvy/dxq7/TZ3zxgiSAvACldITkQvW',4,NULL,NULL,NULL),(45,'client5@enclave.vn','$2y$10$oRvZhFuXNmorQWupnX.dlO0ynUsOkscqLd2Mjxre/wjXsW.UD8QhG',4,NULL,NULL,NULL),(46,'member35@enclave.vn','$2y$10$9ns1USWkf/F1eosxOpEs3Omp9xSqmeK6BZBScWxrwgW/BtV4Q3gdO',5,'VgviYGYYqm7AKdToJOztlTc1OPLKkboA9Q1lOw7nm7j3ebYkTpUgz1VwrkMo',NULL,NULL),(47,'member36@enclave.vn','$2y$10$.olXRw2j6m0.iA9jpeepjOG0ffK1aN/ssSSMFLxcIudDeeh/.zMB2',5,NULL,NULL,NULL),(48,'member37@enclave.vn','$2y$10$p//W7OyskasWPswpZ7chx.qEkvTVllgcHuHMaC4jZKFrBC.aiV.hG',5,NULL,NULL,NULL),(49,'member38@enclave.vn','$2y$10$ciZdntFuxJzJ64QoJMQw4.HEGM8R.Uo06.2xEPFGKCl49AUuQpW4K',5,NULL,NULL,NULL),(50,'member39@enclave.vn','$2y$10$WwjIvYmOvrKtM5yMdeRBeOeNbxkJPkvC0p8bYIUj9Q0sMoaEW7b/i',5,'gbLnwcRJf09Bv4y7ihuTCWL2T7tniF23zwjl2GNuRnjetts8OpFJbAlmBxZm',NULL,NULL),(51,'member40@enclave.vn','$2y$10$8VTjKoBShySU3m/upC1lBebCYMGu/sJJcuaNLK0hcs3CYX9IvxirK',5,NULL,NULL,NULL),(52,'member41@enclave.vn','$2y$10$Ee8LgNAIJewJe6QRIDlRBu..1GtRt6Hlt15ynLGJTG7OhkpQb99YC',5,NULL,NULL,NULL),(53,'member42@enclave.vn','$2y$10$0S7O.37oBqg/Nzj/H5jjQujR9mAhmg2eAf7d1Cb5o15jgSADtVq9e',5,NULL,NULL,NULL),(54,'member43@enclave.vn','$2y$10$XNwTq8j2VVDBRfc0c562xu53vnvl7avA2b5jAptA.Qw/49R8g6Dya',5,NULL,NULL,NULL),(55,'member44@enclave.vn','$2y$10$/uy0v/4YgOu2xIIz0UqoJex39LehF0rBy9Izcan2Yxt.vNc/qZAHy',5,NULL,NULL,NULL),(56,'client_company@enclave.vn','$2y$10$6BB3tsVIc7tFKeIH791Ukuz2Cg/BsOymo2k8BEdP8JxH8tp2k33Ka',6,'rbNve5Uu54yKvjR3E4btKQFZD7l77Hhfy1mqHcsUgx2ts3tpiN1L8EXp2BSb',NULL,NULL),(57,'client_company2@enclave.vn','$2y$10$lFgzWcv7oKE5EXRL8ofpoOs/8j5ZC13vKjs8RdHUGupTK9HPghcfO',6,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -718,4 +755,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-22 17:43:04
+-- Dump completed on 2016-04-24 23:21:10
